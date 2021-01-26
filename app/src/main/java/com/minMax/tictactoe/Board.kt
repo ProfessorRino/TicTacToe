@@ -32,6 +32,20 @@ class Board (val state : List<List<Field>> = listOf(
         }
     }
 
+    fun cloneState() : List<List<Field>> {
+        val cloneState : List<List<Field>> = listOf(
+            listOf(Field(), Field(), Field()),
+            listOf(Field(), Field(), Field()),
+            listOf(Field(), Field(), Field()),
+        )
+        state.forEachIndexed{i, list ->
+            list.forEachIndexed { j, field ->
+                cloneState[i][j].value = field.value
+            }
+        }
+        return cloneState
+    }
+
     fun cpuMove(state: List<List<Field>>): Pair<Int, Int> {
         val stateScore = mutableMapOf<Pair<Int, Int>, Int>()
         state.forEachIndexed { i, list ->
@@ -97,14 +111,21 @@ class Board (val state : List<List<Field>> = listOf(
         return Outcome.DRAW
     }
 
-
     private fun scoreState(state: List<List<Field>>, forSide: Turn): Int {
-        return  when (checkOutcome(state)){
+        return when (checkOutcome(state)) {
             Outcome.X_WIN -> {
-                if (turn == Turn.X) 1 else -1
+                if (turn == Turn.X) {
+                    1
+                } else {
+                    -1
+                }
             }
             Outcome.O_WIN -> {
-                if (turn == Turn.O) 1 else -1
+                if (turn == Turn.O) {
+                    1
+                } else {
+                    -1
+                }
             }
             Outcome.DRAW -> 0
             Outcome.RUN -> {
@@ -112,13 +133,29 @@ class Board (val state : List<List<Field>> = listOf(
                 state.forEach {
                     it.forEach {
                         if (it.value == Value.EMPTY) {
-                            it.value = if (forSide == Turn.X) Value.O else Value.X
-                            scores.add(scoreState(state, if (forSide == Turn.X) Turn.O else Turn.X))
+                            it.value = if (forSide == Turn.X) {
+                                Value.O
+                            } else {
+                                Value.X
+                            }
+                            scores.add(
+                                scoreState(
+                                    state, if (forSide == Turn.X) {
+                                        Turn.O
+                                    } else {
+                                        Turn.X
+                                    }
+                                )
+                            )
                             it.value = Value.EMPTY
                         }
                     }
                 }
-                return if (forSide != turn) scores.maxOrNull()!! else scores.minOrNull()!!
+                return if (forSide != turn) {
+                    scores.maxOrNull()!!
+                } else {
+                    scores.minOrNull()!!
+                }
             }
         }
     }

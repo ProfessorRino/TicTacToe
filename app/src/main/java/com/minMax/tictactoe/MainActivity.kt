@@ -6,14 +6,21 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.minMax.tictactoe.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    val board = Board()
+    private val board = Board()
+
+    private val parentJob = Job()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + parentJob)
 
     private lateinit var binding: ActivityMainBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding.board = board
         setContentView(binding.root)
 
-        resetBoard()
+        resetBoard(Turn.X)
 
         setupClickListener(binding.A0, board.state[0][0])
         setupClickListener(binding.A1, board.state[0][1])
@@ -33,14 +40,21 @@ class MainActivity : AppCompatActivity() {
         setupClickListener(binding.C1, board.state[2][1])
         setupClickListener(binding.C2, board.state[2][2])
 
-        binding.reset.setOnClickListener {
-            resetBoard()
+        binding.xButton.setOnClickListener {
+            resetBoard(Turn.X)
+        }
+
+        binding.oButton.setOnClickListener {
+            resetBoard(Turn.O)
         }
     }
 
-    private fun resetBoard(){
+    private fun resetBoard(humanTurn: Turn){
         board.reset()
         board.turn = Turn.X
+        if (board.turn != humanTurn) {
+            cpuMove()
+        }
         binding.invalidateAll()
     }
 
@@ -58,36 +72,61 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkResult(human: Boolean){
+    private fun checkResult(human: Boolean) {
         board.setOutcome()
-
-        when (board.outcome){
-            Outcome.O_WIN -> {
-                Toast.makeText(applicationContext,"O is the winner!", Toast.LENGTH_LONG).show()
-                (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-            }
-            Outcome.X_WIN -> {
-                Toast.makeText(applicationContext,"X is the winner!", Toast.LENGTH_LONG).show()
-                (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-            }
-            Outcome.DRAW -> {
-                Toast.makeText(applicationContext,"It's a draw!", Toast.LENGTH_LONG).show()
-                (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-            }
-            Outcome.RUN -> {
-                (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(10)
-                board.changeTurn()
-                if (human)  {
-                    cpuMove()
+        runOnUiThread {
+            when (board.outcome) {
+                Outcome.O_WIN,
+                Outcome.X_WIN,
+                Outcome.DRAW -> showOutcome(board.outcome)
+                Outcome.RUN -> {
+                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(10)
+                    board.changeTurn()
+                    if (human) {
+                        cpuMove()
+                    }
                 }
             }
         }
     }
 
-    private fun cpuMove(){
-        val move = board.cpuMove(board.state)
-        board.state[move.first][move.second].value = if (board.turn == Turn.O) Value.O else Value.X
-        binding.invalidateAll()
-        checkResult(false)
+    private fun cpuMove() {
+        binding.progressBar.isVisible = true
+        coroutineScope.launch(Dispatchers.IO) {
+            val move = board.cpuMove(board.cloneState())
+            board.state[move.first][move.second].value = if (board.turn == Turn.O) {
+                Value.O
+            } else {
+                Value.X
+            }
+            binding.invalidateAll()
+            checkResult(false)
+            hideProgress()
+        }
+    }
+
+    private fun hideProgress(){
+        runOnUiThread {
+            binding.progressBar.isVisible = false
+        }
+    }
+
+    private fun showOutcome(outcome: Outcome) {
+        runOnUiThread {
+            when (outcome) {
+                Outcome.O_WIN -> {
+                    Toast.makeText(applicationContext, "O is the winner!", Toast.LENGTH_LONG).show()
+                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
+                }
+                Outcome.X_WIN -> {
+                    Toast.makeText(applicationContext, "X is the winner!", Toast.LENGTH_LONG).show()
+                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
+                }
+                Outcome.DRAW -> {
+                    Toast.makeText(applicationContext, "It's a draw!", Toast.LENGTH_LONG).show()
+                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
+                }
+            }
+        }
     }
 }
