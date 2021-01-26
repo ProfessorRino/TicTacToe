@@ -51,9 +51,19 @@ class Board (val state : List<List<Field>> = listOf(
         state.forEachIndexed { i, list ->
             list.forEachIndexed { j, field ->
                 if (field.value == Value.EMPTY) {
-                    field.value = if (turn == Turn.X) Value.X else Value.O
+                    field.value = if (turn == Turn.X) {
+                        Value.X
+                    } else {
+                        Value.O
+                    }
                     stateScore[Pair(i, j)] =
-                        scoreState(state, if (turn == Turn.O) Turn.O else Turn.X)
+                        scoreState(
+                            state, if (turn == Turn.O) {
+                                Turn.O
+                            } else {
+                                Turn.X
+                            }
+                        )
                     field.value = Value.EMPTY
                 }
             }
