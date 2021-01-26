@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<data>
+<variable name="board" type="com.minMax.tictactoe.Board"/>
+</data>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="150dp">
+
+            <TextView
+                android:id="@+id/A_0"
+                android:text="@{board.state[0][0].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/A_1"
+                android:text="@{board.state[0][1].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/A_2"
+                android:text="@{board.state[0][2].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/B_0"
+                android:text="@{board.state[1][0].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/B_1"
+                android:text="@{board.state[1][1].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/B_2"
+                android:text="@{board.state[1][2].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/C_0"
+                android:text="@{board.state[2][0].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/C_1"
+                android:text="@{board.state[2][1].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+
+            <TextView
+                android:id="@+id/C_2"
+                android:text="@{board.state[2][2].string}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_column="3"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="20pt" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintVertical_bias="0.501" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
