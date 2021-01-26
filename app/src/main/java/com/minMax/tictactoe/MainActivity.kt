@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     private val parentJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Default + parentJob)
 
+    private var cpuMoving = false
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener(textView: TextView, field: Field) {
         textView.setOnClickListener {
-            if (field.value == Value.EMPTY && board.outcome == Outcome.RUN ) {
+            if ( !cpuMoving && field.value == Value.EMPTY && board.outcome == Outcome.RUN) {
                 if (board.turn == Turn.O) {
                     field.value = Value.O
                 } else {
@@ -92,6 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun cpuMove() {
         binding.progressBar.isVisible = true
+        cpuMoving = true
         coroutineScope.launch(Dispatchers.IO) {
             val move = board.cpuMove(board.cloneState())
             board.state[move.first][move.second].value = if (board.turn == Turn.O) {
@@ -102,6 +105,7 @@ class MainActivity : AppCompatActivity() {
             binding.invalidateAll()
             checkResult(false)
             hideProgress()
+            cpuMoving = false
         }
     }
 
