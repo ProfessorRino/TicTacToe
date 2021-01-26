@@ -33,12 +33,10 @@ class Board (val state : List<List<Field>> = listOf(
     }
 
     fun cpuMove(state: List<List<Field>>): Pair<Int, Int> {
-        var pos = -1
         val stateScore = mutableMapOf<Pair<Int, Int>, Int>()
         state.forEachIndexed { i, list ->
             list.forEachIndexed { j, field ->
                 if (field.value == Value.EMPTY) {
-                    pos += 1
                     field.value = if (turn == Turn.X) Value.X else Value.O
                     stateScore[Pair(i, j)] =
                         scoreState(state, if (turn == Turn.O) Turn.O else Turn.X)
