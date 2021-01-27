@@ -25,8 +25,8 @@ class Board (val state : List<List<Field>> = listOf(
     fun reset() {
         outcome = Outcome.RUN
         turn = Turn.O
-        state.forEach { list ->
-            list.forEach {
+        state.forEach { row ->
+            row.forEach {
                 it.value = Value.EMPTY
             }
         }
@@ -38,8 +38,8 @@ class Board (val state : List<List<Field>> = listOf(
             listOf(Field(), Field(), Field()),
             listOf(Field(), Field(), Field()),
         )
-        state.forEachIndexed{i, list ->
-            list.forEachIndexed { j, field ->
+        state.forEachIndexed{i, row ->
+            row.forEachIndexed { j, field ->
                 cloneState[i][j].value = field.value
             }
         }
@@ -48,8 +48,8 @@ class Board (val state : List<List<Field>> = listOf(
 
     fun cpuMove(state: List<List<Field>>): Pair<Int, Int> {
         val stateScore = mutableMapOf<Pair<Int, Int>, Int>()
-        state.forEachIndexed { i, list ->
-            list.forEachIndexed { j, field ->
+        state.forEachIndexed { i, row ->
+            row.forEachIndexed { j, field ->
                 if (field.value == Value.EMPTY) {
                     field.value = if (turn == Turn.X) {
                         Value.X
@@ -80,13 +80,13 @@ class Board (val state : List<List<Field>> = listOf(
                 return Outcome.O_WIN
             }
         }
-        
+
         //vertical
-        for (i in 0..2) {
-            if (state[0][i].value == state[1][i].value && state[1][i].value == state[2][i].value) {
-                if (state[0][i].value == Value.X) {
+        for (col in 0..2) {
+            if (state[0][col].value == state[1][col].value && state[1][col].value == state[2][col].value) {
+                if (state[0][col].value == Value.X) {
                     return Outcome.X_WIN
-                } else if (state[0][i].value == Value.O) {
+                } else if (state[0][col].value == Value.O) {
                     return Outcome.O_WIN
                 }
             }
@@ -102,8 +102,8 @@ class Board (val state : List<List<Field>> = listOf(
             }
         }
 
-        state.forEach { list ->
-            if (list.any {
+        state.forEach { row ->
+            if (row.any {
                     it.value == Value.EMPTY
                 }) {
                 return Outcome.RUN
@@ -132,8 +132,8 @@ class Board (val state : List<List<Field>> = listOf(
             Outcome.DRAW -> 0
             Outcome.RUN -> {
                 val scores = mutableListOf<Int>()
-                state.forEach {
-                    it.forEach {
+                state.forEach { row ->
+                    row.forEach {
                         if (it.value == Value.EMPTY) {
                             it.value = if (forSide == Turn.X) {
                                 Value.O

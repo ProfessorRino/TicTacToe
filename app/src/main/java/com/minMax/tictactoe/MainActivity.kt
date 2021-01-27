@@ -3,6 +3,7 @@ package com.minMax.tictactoe
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.VibrationEffect
 import android.os.Vibrator
 import android.widget.TextView
 import android.widget.Toast
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 Outcome.X_WIN,
                 Outcome.DRAW -> showOutcome(board.outcome)
                 Outcome.RUN -> {
-                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(10)
+                    vibrate(10)
                     board.changeTurn()
                     if (human) {
                         cpuMove()
@@ -109,28 +110,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showOutcome(outcome: Outcome) {
+        runOnUiThread {
+            when (outcome) {
+                Outcome.O_WIN -> {
+                    Toast.makeText(applicationContext, "O is the winner!", Toast.LENGTH_LONG).show()
+                    vibrate(100)
+                }
+                Outcome.X_WIN -> {
+                    Toast.makeText(applicationContext, "X is the winner!", Toast.LENGTH_LONG).show()
+                    vibrate(100)
+                }
+                Outcome.DRAW -> {
+                    Toast.makeText(applicationContext, "It's a draw!", Toast.LENGTH_LONG).show()
+                    vibrate(100)
+                }
+            }
+        }
+    }
+
     private fun hideProgress(){
         runOnUiThread {
             binding.progressBar.isVisible = false
         }
     }
 
-    private fun showOutcome(outcome: Outcome) {
-        runOnUiThread {
-            when (outcome) {
-                Outcome.O_WIN -> {
-                    Toast.makeText(applicationContext, "O is the winner!", Toast.LENGTH_LONG).show()
-                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-                }
-                Outcome.X_WIN -> {
-                    Toast.makeText(applicationContext, "X is the winner!", Toast.LENGTH_LONG).show()
-                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-                }
-                Outcome.DRAW -> {
-                    Toast.makeText(applicationContext, "It's a draw!", Toast.LENGTH_LONG).show()
-                    (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(100)
-                }
-            }
+    private fun vibrate(ms: Long){
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(ms)
         }
     }
 }
