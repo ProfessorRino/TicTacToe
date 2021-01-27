@@ -72,23 +72,35 @@ class Board (val state : List<List<Field>> = listOf(
     }
 
     private fun checkOutcome(state: List<List<Field>>): Outcome {
-        //horizontal
-        state.forEach {
-            if (it[0].value == it[1].value && it[1].value == it[2].value) {
-                return if (it[0].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
+        for (i in 0..2) {
+            //horizontal
+            if (state[i][0].value == state[i][1].value && state[i][1].value == state[i][2].value) {
+                if (state[i][0].value == Value.X) {
+                    return Outcome.X_WIN
+                } else if (state[i][0].value == Value.O) {
+                    return Outcome.O_WIN
+                }
             }
         }
         //vertical
         for (i in 0..2) {
             if (state[0][i].value == state[1][i].value && state[1][i].value == state[2][i].value) {
-                return if (state[0][i].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
+                if (state[0][i].value == Value.X) {
+                    return Outcome.X_WIN
+                } else if (state[0][i].value == Value.O) {
+                    return Outcome.O_WIN
+                }
             }
         }
         //diagonal
         if (state[0][0].value == state[1][1].value && state[1][1].value == state[2][2].value ||
             state[0][2].value == state[1][1].value && state[1][1].value == state[2][0].value
         ) {
-            return if (state[1][1].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
+            if (state[1][1].value == Value.X) {
+                return Outcome.X_WIN
+            } else if (state[1][1].value == Value.O) {
+                return Outcome.O_WIN
+            }
         }
 
         state.forEach { list ->
@@ -98,6 +110,7 @@ class Board (val state : List<List<Field>> = listOf(
                 return Outcome.RUN
             }
         }
+        
         return Outcome.DRAW
     }
 
