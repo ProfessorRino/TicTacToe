@@ -72,16 +72,15 @@ class Board (val state : List<List<Field>> = listOf(
     }
 
     private fun checkOutcome(state: List<List<Field>>): Outcome {
-        for (i in 0..2) {
-            //horizontal
-            if (state[i][0].value == state[i][1].value && state[i][1].value == state[i][2].value) {
-                if (state[i][0].value == Value.X) {
-                    return Outcome.X_WIN
-                } else if (state[i][0].value == Value.O) {
-                    return Outcome.O_WIN
-                }
+        //horizontal
+        state.forEach { row ->
+            if (row.all { it.value == Value.X }) {
+                return Outcome.X_WIN
+            } else if (row.all { it.value == Value.O }) {
+                return Outcome.O_WIN
             }
         }
+        
         //vertical
         for (i in 0..2) {
             if (state[0][i].value == state[1][i].value && state[1][i].value == state[2][i].value) {
@@ -110,7 +109,7 @@ class Board (val state : List<List<Field>> = listOf(
                 return Outcome.RUN
             }
         }
-        
+
         return Outcome.DRAW
     }
 
