@@ -72,43 +72,23 @@ class Board (val state : List<List<Field>> = listOf(
     }
 
     private fun checkOutcome(state: List<List<Field>>): Outcome {
-        //TODO: condense
         //horizontal
-        if ((state[0][0].value == Value.O && state[0][1].value == Value.O && state[0][2].value == Value.O) ||
-            (state[1][0].value == Value.O && state[1][1].value == Value.O && state[1][2].value == Value.O) ||
-            (state[2][0].value == Value.O && state[2][1].value == Value.O && state[2][2].value == Value.O)
-        ) {
-            return Outcome.O_WIN
-        }
-        if ((state[0][0].value == Value.X && state[0][1].value == Value.X && state[0][2].value == Value.X) ||
-            (state[1][0].value == Value.X && state[1][1].value == Value.X && state[1][2].value == Value.X) ||
-            (state[2][0].value == Value.X && state[2][1].value == Value.X && state[2][2].value == Value.X)
-        ) {
-            return Outcome.X_WIN
+        state.forEach {
+            if (it[0].value == it[1].value && it[1].value == it[2].value) {
+                return if (it[0].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
+            }
         }
         //vertical
-        if ((state[0][0].value == Value.O && state[1][0].value == Value.O && state[2][0].value == Value.O) ||
-            (state[0][1].value == Value.O && state[1][1].value == Value.O && state[2][1].value == Value.O) ||
-            (state[0][2].value == Value.O && state[1][2].value == Value.O && state[2][2].value == Value.O)
-        ) {
-            return Outcome.O_WIN
-        }
-        if ((state[0][0].value == Value.X && state[1][0].value == Value.X && state[2][0].value == Value.X) ||
-            (state[0][1].value == Value.X && state[1][1].value == Value.X && state[2][1].value == Value.X) ||
-            (state[0][2].value == Value.X && state[1][2].value == Value.X && state[2][2].value == Value.X)
-        ) {
-            return Outcome.X_WIN
+        for (i in 0..2) {
+            if (state[0][i].value == state[1][i].value && state[1][i].value == state[2][i].value) {
+                return if (state[0][i].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
+            }
         }
         //diagonal
-        if ((state[0][0].value == Value.O && state[1][1].value == Value.O && state[2][2].value == Value.O) ||
-            (state[0][2].value == Value.O && state[1][1].value == Value.O && state[2][0].value == Value.O)
+        if (state[0][0].value == state[1][1].value && state[1][1].value == state[2][2].value ||
+            state[0][2].value == state[1][1].value && state[1][1].value == state[2][0].value
         ) {
-            return Outcome.O_WIN
-        }
-        if ((state[0][0].value == Value.X && state[1][1].value == Value.X && state[2][2].value == Value.X) ||
-            (state[0][2].value == Value.X && state[1][1].value == Value.X && state[2][0].value == Value.X)
-        ) {
-            return Outcome.X_WIN
+            return if (state[1][1].value == Value.X) Outcome.X_WIN else Outcome.O_WIN
         }
 
         state.forEach { list ->
