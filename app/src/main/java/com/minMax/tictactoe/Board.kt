@@ -57,13 +57,7 @@ class Board (val state : List<List<Field>> = listOf(
                         Value.O
                     }
                     stateScore[Pair(i, j)] =
-                        scoreState(
-                            state, if (turn == Turn.O) {
-                                Turn.O
-                            } else {
-                                Turn.X
-                            }
-                        )
+                        scoreState(state, turn)
                     field.value = Value.EMPTY
                 }
             }
