@@ -18,7 +18,7 @@ using Jetpack ViewModel and Compose (beta01). The human player never wins.
 - Appear on top of the board when a game is over
 - Displays nothing while game is running
 
-![alt text]( "screenshot")
+![alt text](https://github.com/ProfessorRino/TicTacToe/blob/master/tictactoeScreenshot.png "screenshot")
 
   
 
