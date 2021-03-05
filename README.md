@@ -6,7 +6,7 @@ using Jetpack ViewModel and Compose (beta01). The human player never wins.
 #### 2. Setup
 - Clone the project to Android Studio Canary (Arctic Fox). 
 - You might have to delete *.idea/gradle.xml* and *.idea/workspace.xml* to start building.
-#### 3. Functios
+#### 3. Functions
 ##### a) Play Buttons
 - Set which side is played by human input, the opponent is automated
 - Reset the board
